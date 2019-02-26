@@ -1,6 +1,7 @@
 package com.igzali.parolayoneticisi.daos;
 
 import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.utils.DatabaseConsts;
 
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface PasswordDao {
     @Delete
     void delete(Password password);
 
-    @Query("SELECT * FROM passwords")
+    @Query("SELECT * FROM " + DatabaseConsts.PASSWORDS_TABLE_NAME)
     LiveData<List<Password>> getAllPasswords();
 }
