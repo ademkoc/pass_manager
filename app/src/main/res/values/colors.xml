@@ -5,5 +5,6 @@
     <color name="colorAccent">@color/black</color>
 
     <color name="black">#000000</color>
-
+    <color name="orange">#ffc107</color>
+    <color name="white">#FFFFFF</color>
 </resources>

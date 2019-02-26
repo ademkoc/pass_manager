@@ -2,9 +2,14 @@ package com.igzali.parolayoneticisi.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.selection.SelectionPredicates;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,12 +17,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.igzali.parolayoneticisi.PasswordAdapter;
+import com.igzali.parolayoneticisi.adapter.PasswordAdapter;
 import com.igzali.parolayoneticisi.PasswordViewModel;
 import com.igzali.parolayoneticisi.R;
+import com.igzali.parolayoneticisi.adapter.PasswordItemLookup;
 import com.igzali.parolayoneticisi.entities.Password;
 import com.igzali.parolayoneticisi.utils.IntentConsts;
 
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private PasswordViewModel mPasswordViewModel;
     private PasswordAdapter mPasswordAdapter;
     private CoordinatorLayout mCoordinatorLayout;
+    private ActionMode mActionMode;
     private final static String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -37,16 +43,47 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         mCoordinatorLayout = findViewById(R.id.coordinator_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,
-                false));
-        recyclerView.setHasFixedSize(true);
-
-        mPasswordAdapter = new PasswordAdapter();
-        recyclerView.setAdapter(mPasswordAdapter);
+        initializeRecyclerView(findViewById(R.id.recycler_view));
 
         mPasswordViewModel = ViewModelProviders.of(this).get(PasswordViewModel.class);
         mPasswordViewModel.getAllPasswords().observe(this, this);
+    }
+
+    private void initializeRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
+        recyclerView.setHasFixedSize(true);
+
+        mPasswordAdapter = new PasswordAdapter();
+        mPasswordAdapter.setHasStableIds(true);
+        recyclerView.setAdapter(mPasswordAdapter);
+
+        SelectionTracker<Long> selectionTracker = new SelectionTracker.Builder<>(
+                getString(R.string.app_name),
+                recyclerView,
+                new StableIdKeyProvider(recyclerView),
+                new PasswordItemLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+        ).build();
+
+        mPasswordAdapter.setSelectionTracker(selectionTracker);
+
+        selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+            @Override
+            public void onSelectionChanged() {
+                super.onSelectionChanged();
+                if (selectionTracker.hasSelection()) {
+                    if (mActionMode == null) {
+                        mActionMode = startSupportActionMode(new RecyclerViewActionModeCallBack());
+                    }
+                    mActionMode.setTitle(String.format("Selected item count: %d", selectionTracker.getSelection().size()));
+                } else {
+                    mActionMode.finish();
+                    mActionMode = null;
+                }
+            }
+        });
     }
 
 
