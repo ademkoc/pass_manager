@@ -8,10 +8,16 @@ import android.view.MenuItem;
 import com.igzali.parolayoneticisi.R;
 
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.selection.SelectionTracker;
 
 public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
 
     private static final String TAG = RecyclerViewActionModeCallBack.class.getSimpleName();
+    private SelectionTracker<Long> mSelectionTracker;
+
+    public RecyclerViewActionModeCallBack(SelectionTracker<Long> selectionTracker) {
+        mSelectionTracker = selectionTracker;
+    }
 
     @Override
     public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -43,7 +49,16 @@ public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
 
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
+        mSelectionTracker.clearSelection();
+    }
 
+    public void onMultiItemSelected(ActionMode actionMode) {
+        MenuItem menuEditItem = actionMode.getMenu().findItem(R.id.menu_edit);
+        if (mSelectionTracker.getSelection().size() > 1) {
+            menuEditItem.setVisible(false);
+        } else {
+            menuEditItem.setVisible(true);
+        }
     }
 
 }

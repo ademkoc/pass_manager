@@ -69,15 +69,22 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         mPasswordAdapter.setSelectionTracker(selectionTracker);
 
+        setupContextualActionBar(selectionTracker);
+    }
+
+    private void setupContextualActionBar(SelectionTracker selectionTracker) {
+        RecyclerViewActionModeCallBack callback = new RecyclerViewActionModeCallBack(selectionTracker);
+
         selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
             @Override
             public void onSelectionChanged() {
                 super.onSelectionChanged();
                 if (selectionTracker.hasSelection()) {
                     if (mActionMode == null) {
-                        mActionMode = startSupportActionMode(new RecyclerViewActionModeCallBack());
+                        mActionMode = startSupportActionMode(callback);
                     }
                     mActionMode.setTitle(String.format("Selected item count: %d", selectionTracker.getSelection().size()));
+                    callback.onMultiItemSelected(mActionMode);
                 } else {
                     mActionMode.finish();
                     mActionMode = null;
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
             }
         });
     }
-
 
     @Override
     public void onChanged(List<Password> passwords) {
