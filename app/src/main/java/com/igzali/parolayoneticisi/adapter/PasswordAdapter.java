@@ -76,7 +76,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         }
 
         ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
-            return new PasswordItemDetails(getAdapterPosition(), getItemId());
+            return new PasswordItemDetails(getAdapterPosition(), PasswordAdapter.this.getItemId(getAdapterPosition()));
         }
     }
 

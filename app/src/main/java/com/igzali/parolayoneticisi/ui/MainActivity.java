@@ -80,6 +80,20 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
     private void setupContextualActionBar(SelectionTracker selectionTracker) {
         RecyclerViewActionModeCallBack callback = new RecyclerViewActionModeCallBack(selectionTracker);
+        callback.setActionItemClickListener((actionMode, item) -> {
+            switch (item.getItemId()) {
+                case R.id.menu_delete:
+
+                    actionMode.finish();
+                    return true;
+                case R.id.menu_edit:
+
+                    actionMode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        });
 
         selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
             @Override

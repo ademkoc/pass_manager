@@ -12,8 +12,13 @@ import androidx.recyclerview.selection.SelectionTracker;
 
 public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
 
+    public interface OnActionItemClickListener {
+        boolean onActionItemClick(ActionMode actionMode, MenuItem item);
+    }
+
     private static final String TAG = RecyclerViewActionModeCallBack.class.getSimpleName();
     private SelectionTracker<Long> mSelectionTracker;
+    private OnActionItemClickListener mActionItemClickListener;
 
     public RecyclerViewActionModeCallBack(SelectionTracker<Long> selectionTracker) {
         mSelectionTracker = selectionTracker;
@@ -33,18 +38,7 @@ public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
 
     @Override
     public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_delete:
-                Log.d(TAG, "delete");
-                actionMode.finish();
-                return true;
-            case R.id.menu_edit:
-                Log.d(TAG, "edit");
-                actionMode.finish();
-                return true;
-            default:
-                return false;
-        }
+        return mActionItemClickListener.onActionItemClick(actionMode, item);
     }
 
     @Override
@@ -61,4 +55,7 @@ public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
         }
     }
 
+    public void setActionItemClickListener(OnActionItemClickListener actionItemClickListener) {
+        mActionItemClickListener = actionItemClickListener;
+    }
 }
