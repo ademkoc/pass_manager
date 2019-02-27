@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.igzali.parolayoneticisi.adapter.PasswordAdapter;
@@ -52,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private void initializeRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
         recyclerView.setHasFixedSize(true);
+
+        int resId = R.anim.layout_animation_fall_down;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getApplicationContext(), resId);
+        recyclerView.setLayoutAnimation(animation);
 
         mPasswordAdapter = new PasswordAdapter();
         mPasswordAdapter.setHasStableIds(true);
