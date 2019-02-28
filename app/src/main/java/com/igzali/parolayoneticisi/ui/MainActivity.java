@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
-import androidx.recyclerview.selection.StableIdKeyProvider;
 import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,10 +23,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.igzali.parolayoneticisi.adapter.PasswordAdapter;
 import com.igzali.parolayoneticisi.PasswordViewModel;
 import com.igzali.parolayoneticisi.R;
+import com.igzali.parolayoneticisi.adapter.PasswordItemKeyProvider;
 import com.igzali.parolayoneticisi.adapter.PasswordItemLookup;
 import com.igzali.parolayoneticisi.entities.Password;
 import com.igzali.parolayoneticisi.utils.IntentConsts;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Observer<List<Password>> {
@@ -36,7 +37,10 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private PasswordAdapter mPasswordAdapter;
     private CoordinatorLayout mCoordinatorLayout;
     private ActionMode mActionMode;
+    private SelectionTracker<Long> mSelectionTracker;
+    private RecyclerViewActionModeCallBack mActionModeCallBack;
     private final static String TAG = MainActivity.class.getSimpleName();
+    private static final String KEY_ACTION_MODE = "is_action_mode_open";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +49,23 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         mCoordinatorLayout = findViewById(R.id.coordinator_main);
 
-        initializeRecyclerView(findViewById(R.id.recycler_view));
+        initRecyclerView(findViewById(R.id.recycler_view));
+        setupContextualActionBar(mSelectionTracker);
+
+        if (savedInstanceState != null) {
+            mSelectionTracker.onRestoreInstanceState(savedInstanceState);
+            boolean wasActionModeOpen = savedInstanceState.getBoolean(KEY_ACTION_MODE);
+            if (wasActionModeOpen) {
+                startContextualActionBar(mSelectionTracker);
+            }
+        }
 
         mPasswordViewModel = ViewModelProviders.of(this).get(PasswordViewModel.class);
         mPasswordViewModel.getAllPasswords().observe(this, this);
     }
 
-    private void initializeRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
+    private void initRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
         int resId = R.anim.layout_animation_fall_down;
@@ -63,27 +76,20 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
         mPasswordAdapter.setHasStableIds(true);
         recyclerView.setAdapter(mPasswordAdapter);
 
-        SelectionTracker<Long> selectionTracker = new SelectionTracker.Builder<>(
-                getString(R.string.app_name),
-                recyclerView,
-                new StableIdKeyProvider(recyclerView),
-                new PasswordItemLookup(recyclerView),
-                StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-        ).build();
+        initSelectionTracker(recyclerView);
 
-        mPasswordAdapter.setSelectionTracker(selectionTracker);
-
-        setupContextualActionBar(selectionTracker);
+        mPasswordAdapter.setSelectionTracker(mSelectionTracker);
     }
 
-    private void setupContextualActionBar(SelectionTracker selectionTracker) {
-        RecyclerViewActionModeCallBack callback = new RecyclerViewActionModeCallBack(selectionTracker);
-        callback.setActionItemClickListener((actionMode, item) -> {
+    private void setupContextualActionBar(SelectionTracker tracker) {
+        mActionModeCallBack = new RecyclerViewActionModeCallBack(tracker);
+        mActionModeCallBack.setActionItemClickListener((actionMode, item) -> {
             switch (item.getItemId()) {
                 case R.id.menu_delete:
-
+                    Iterator iterator = tracker.getSelection().iterator();
+                    while (iterator.hasNext()) {
+                        mPasswordViewModel.delete((Long) iterator.next());
+                    }
                     actionMode.finish();
                     return true;
                 case R.id.menu_edit:
@@ -95,22 +101,42 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
             }
         });
 
-        selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+        tracker.addObserver(new SelectionTracker.SelectionObserver() {
             @Override
             public void onSelectionChanged() {
                 super.onSelectionChanged();
-                if (selectionTracker.hasSelection()) {
-                    if (mActionMode == null) {
-                        mActionMode = startSupportActionMode(callback);
-                    }
-                    mActionMode.setTitle(String.format("Selected item count: %d", selectionTracker.getSelection().size()));
-                    callback.onMultiItemSelected(mActionMode);
+                if (tracker.hasSelection()) {
+                    startContextualActionBar(tracker);
                 } else {
                     mActionMode.finish();
                     mActionMode = null;
                 }
             }
         });
+    }
+
+    private void startContextualActionBar(SelectionTracker tracker) {
+        if (mActionMode == null) {
+            mActionMode = startSupportActionMode(mActionModeCallBack);
+        }
+        mActionMode.setTitle(String.format("Selected item count: %d", tracker.getSelection().size()));
+        mActionModeCallBack.onMultiItemSelected(mActionMode);
+    }
+
+    private void initSelectionTracker(RecyclerView recyclerView) {
+        if (mSelectionTracker != null)
+            return;
+
+        mSelectionTracker = new SelectionTracker.Builder<>(
+                getString(R.string.app_name),
+                recyclerView,
+                new PasswordItemKeyProvider(recyclerView),
+                new PasswordItemLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+        ).build();
+
     }
 
     @Override
@@ -139,5 +165,12 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
         }
         Password password = data.getParcelableExtra(IntentConsts.PASSWORD_EXTRA_NAME);
         mPasswordViewModel.insert(password);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSelectionTracker.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ACTION_MODE, mActionMode != null);
     }
 }
