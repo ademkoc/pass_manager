@@ -6,11 +6,11 @@ import androidx.recyclerview.selection.ItemDetailsLookup;
 public class PasswordItemDetails extends ItemDetailsLookup.ItemDetails<Long> {
 
     private int mPosition;
-    private Long mId;
+    private Long mKey;
 
-    public PasswordItemDetails(int position, Long id) {
+    public PasswordItemDetails(int position, Long key) {
         mPosition = position;
-        mId = id;
+        mKey = key;
     }
 
     @Override
@@ -21,6 +21,6 @@ public class PasswordItemDetails extends ItemDetailsLookup.ItemDetails<Long> {
     @Nullable
     @Override
     public Long getSelectionKey() {
-        return mId;
+        return mKey;
     }
 }
