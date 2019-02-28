@@ -1,10 +1,9 @@
-package com.igzali.parolayoneticisi.db;
+package com.igzali.parolayoneticisi.data.source.local;
 
 import android.content.Context;
 
+import com.igzali.parolayoneticisi.data.Password;
 import com.igzali.parolayoneticisi.utils.DatabaseConsts;
-import com.igzali.parolayoneticisi.daos.PasswordDao;
-import com.igzali.parolayoneticisi.entities.Password;
 
 import androidx.room.Room;
 import androidx.room.RoomDatabase;

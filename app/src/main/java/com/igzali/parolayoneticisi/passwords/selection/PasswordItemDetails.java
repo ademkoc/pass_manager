@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.adapter;
+package com.igzali.parolayoneticisi.passwords.selection;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;

@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.adapter;
+package com.igzali.parolayoneticisi.passwords;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.igzali.parolayoneticisi.R;
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
+import com.igzali.parolayoneticisi.passwords.selection.PasswordItemDetails;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.selection.ItemDetailsLookup;
@@ -59,7 +60,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             holder.itemView.setActivated(mSelectionTracker.isSelected((long) currentNote.getId()));
     }
 
-    class PasswordViewHolder extends RecyclerView.ViewHolder {
+    public class PasswordViewHolder extends RecyclerView.ViewHolder {
 
         private TextView labelTextView;
         private TextView emailTextView;
@@ -76,7 +77,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             usernameTextView = itemView.findViewById(R.id.text_username);
         }
 
-        ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
+        public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
             return new PasswordItemDetails(getAdapterPosition(), getItemId());
         }
     }

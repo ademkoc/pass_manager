@@ -1,7 +1,9 @@
-package com.igzali.parolayoneticisi.adapter;
+package com.igzali.parolayoneticisi.passwords.selection;
 
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.igzali.parolayoneticisi.passwords.PasswordAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

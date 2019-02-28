@@ -1,10 +1,10 @@
-package com.igzali.parolayoneticisi;
+package com.igzali.parolayoneticisi.data.source;
 
 import android.app.Application;
 
-import com.igzali.parolayoneticisi.daos.PasswordDao;
-import com.igzali.parolayoneticisi.db.Database;
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
+import com.igzali.parolayoneticisi.data.source.local.Database;
+import com.igzali.parolayoneticisi.data.source.local.PasswordDao;
 
 import java.util.Date;
 import java.util.List;

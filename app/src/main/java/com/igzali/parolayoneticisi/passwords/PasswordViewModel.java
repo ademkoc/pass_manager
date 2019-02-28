@@ -1,8 +1,9 @@
-package com.igzali.parolayoneticisi;
+package com.igzali.parolayoneticisi.passwords;
 
 import android.app.Application;
 
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
+import com.igzali.parolayoneticisi.data.source.PasswordRepository;
 
 import java.util.List;
 

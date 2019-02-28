@@ -1,6 +1,6 @@
-package com.igzali.parolayoneticisi.daos;
+package com.igzali.parolayoneticisi.data.source.local;
 
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
 import com.igzali.parolayoneticisi.utils.DatabaseConsts;
 
 import java.util.List;

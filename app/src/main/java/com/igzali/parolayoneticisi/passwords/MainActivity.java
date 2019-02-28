@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.ui;
+package com.igzali.parolayoneticisi.passwords;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +20,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.igzali.parolayoneticisi.adapter.PasswordAdapter;
-import com.igzali.parolayoneticisi.PasswordViewModel;
 import com.igzali.parolayoneticisi.R;
-import com.igzali.parolayoneticisi.adapter.PasswordItemKeyProvider;
-import com.igzali.parolayoneticisi.adapter.PasswordItemLookup;
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
+import com.igzali.parolayoneticisi.passwords.selection.PasswordItemKeyProvider;
+import com.igzali.parolayoneticisi.passwords.selection.PasswordItemLookup;
 import com.igzali.parolayoneticisi.utils.IntentConsts;
 
 import java.util.Iterator;
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
         mPasswordAdapter.setSelectionTracker(mSelectionTracker);
     }
 
-    private void setupContextualActionBar(SelectionTracker tracker) {
+    private void setupContextualActionBar(SelectionTracker<Long> tracker) {
         mActionModeCallBack = new RecyclerViewActionModeCallBack(tracker);
         mActionModeCallBack.setActionItemClickListener((actionMode, item) -> {
             switch (item.getItemId()) {

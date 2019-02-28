@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.db;
+package com.igzali.parolayoneticisi.data.source.local;
 
 import java.util.Date;
 

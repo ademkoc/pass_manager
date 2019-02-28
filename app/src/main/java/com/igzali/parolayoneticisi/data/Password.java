@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.entities;
+package com.igzali.parolayoneticisi.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.ui;
+package com.igzali.parolayoneticisi.passwords;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.igzali.parolayoneticisi.R;
-import com.igzali.parolayoneticisi.entities.Password;
+import com.igzali.parolayoneticisi.data.Password;
 import com.igzali.parolayoneticisi.utils.IntentConsts;
 
 public class AddEditActivity extends AppCompatActivity {
@@ -36,6 +36,10 @@ public class AddEditActivity extends AppCompatActivity {
         mLabelTextInputLayout = findViewById(R.id.text_input_label);
 
         //mCoordinatorLayout = findViewById(R.id.coordinator_add_edit);
+
+        if (getIntent().hasExtra("id")) {
+            long l = getIntent().getLongExtra("id", -1);
+        }
     }
 
     @Override

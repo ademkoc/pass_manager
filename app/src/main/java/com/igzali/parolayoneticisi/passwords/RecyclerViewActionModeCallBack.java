@@ -1,4 +1,4 @@
-package com.igzali.parolayoneticisi.ui;
+package com.igzali.parolayoneticisi.passwords;
 
 import android.util.Log;
 import android.view.Menu;
