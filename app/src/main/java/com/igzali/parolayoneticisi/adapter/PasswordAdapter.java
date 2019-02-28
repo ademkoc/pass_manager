@@ -26,6 +26,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         @Override
         public boolean areContentsTheSame(@NonNull Password oldItem, @NonNull Password newItem) {
             return oldItem.getLabel().equals(newItem.getLabel())
+                    && oldItem.getUsername().equals(newItem.getUsername())
                     && oldItem.getDescription().equals(newItem.getDescription())
                     && oldItem.getEmail().equals(newItem.getEmail())
                     && oldItem.getPassword().equals(newItem.getPassword());
@@ -76,7 +77,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         }
 
         ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
-            return new PasswordItemDetails(getAdapterPosition(), PasswordAdapter.this.getItemId(getAdapterPosition()));
+            return new PasswordItemDetails(getAdapterPosition(), getItemId());
         }
     }
 
