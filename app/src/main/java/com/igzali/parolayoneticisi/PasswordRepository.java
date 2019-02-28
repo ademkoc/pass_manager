@@ -32,8 +32,8 @@ public class PasswordRepository {
         new Thread(() -> mPasswordDao.update(password)).start();
     }
 
-    public void delete(Password password) {
-        new Thread(() -> mPasswordDao.delete(password)).start();
+    public void delete(long id) {
+        new Thread(() -> mPasswordDao.delete(id)).start();
     }
 
     public LiveData<List<Password>> getAllNotes() {

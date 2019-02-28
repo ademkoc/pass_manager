@@ -21,8 +21,8 @@ public interface PasswordDao {
     @Update
     void update(Password password);
 
-    @Delete
-    void delete(Password password);
+    @Query("DELETE FROM "+ DatabaseConsts.PASSWORDS_TABLE_NAME + " WHERE id = :id")
+    void delete(long id);
 
     @Query("SELECT * FROM " + DatabaseConsts.PASSWORDS_TABLE_NAME)
     LiveData<List<Password>> getAllPasswords();

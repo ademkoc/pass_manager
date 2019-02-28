@@ -29,8 +29,8 @@ public class PasswordViewModel extends AndroidViewModel {
         mPasswordRepository.update(password);
     }
 
-    public void delete(Password password) {
-        mPasswordRepository.delete(password);
+    public void delete(long id) {
+        mPasswordRepository.delete(id);
     }
 
     public LiveData<List<Password>> getAllPasswords() {
