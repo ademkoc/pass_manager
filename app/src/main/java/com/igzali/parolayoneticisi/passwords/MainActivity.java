@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private PasswordAdapter mPasswordAdapter;
     private CoordinatorLayout mCoordinatorLayout;
     private ActionMode mActionMode;
-    private SelectionTracker<Long> mSelectionTracker;
+    private SelectionTracker<Password> mSelectionTracker;
     private RecyclerViewActionModeCallBack mActionModeCallBack;
     private final static String TAG = MainActivity.class.getSimpleName();
     private static final String KEY_ACTION_MODE = "is_action_mode_open";
@@ -79,15 +79,12 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
         mPasswordAdapter.setSelectionTracker(mSelectionTracker);
     }
 
-    private void setupContextualActionBar(SelectionTracker<Long> tracker) {
+    private void setupContextualActionBar(SelectionTracker<Password> tracker) {
         mActionModeCallBack = new RecyclerViewActionModeCallBack(tracker);
         mActionModeCallBack.setActionItemClickListener((actionMode, item) -> {
             switch (item.getItemId()) {
                 case R.id.menu_delete:
-                    Iterator iterator = tracker.getSelection().iterator();
-                    while (iterator.hasNext()) {
-                        mPasswordViewModel.delete((Long) iterator.next());
-                    }
+
                     actionMode.finish();
                     return true;
                 case R.id.menu_edit:
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
                 recyclerView,
                 new PasswordItemKeyProvider(recyclerView),
                 new PasswordItemLookup(recyclerView),
-                StorageStrategy.createLongStorage()
+                StorageStrategy.createParcelableStorage(Password.class)
         ).withSelectionPredicate(
                 SelectionPredicates.createSelectAnything()
         ).build();

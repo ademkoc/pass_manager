@@ -33,7 +33,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
                     && oldItem.getPassword().equals(newItem.getPassword());
         }
     };
-    private SelectionTracker<Long> mSelectionTracker;
+    private SelectionTracker<Password> mSelectionTracker;
     private static final String TAG = PasswordAdapter.class.getSimpleName();
 
     public PasswordAdapter() {
@@ -57,7 +57,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         holder.descriptionTextView.setText(currentNote.getDescription());
 
         if (mSelectionTracker != null)
-            holder.itemView.setActivated(mSelectionTracker.isSelected((long) currentNote.getId()));
+            holder.itemView.setActivated(mSelectionTracker.isSelected(currentNote));
     }
 
     public class PasswordViewHolder extends RecyclerView.ViewHolder {
@@ -77,8 +77,8 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             usernameTextView = itemView.findViewById(R.id.text_username);
         }
 
-        public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
-            return new PasswordItemDetails(getAdapterPosition(), getItemId());
+        public ItemDetailsLookup.ItemDetails<Password> getItemDetails() {
+            return new PasswordItemDetails(getAdapterPosition(), getItem(getAdapterPosition()));
         }
     }
 
@@ -87,7 +87,11 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         return getItem(position).getId();
     }
 
-    public void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
+    public Password getPassword(int position) {
+        return getItem(position);
+    }
+
+    public void setSelectionTracker(SelectionTracker<Password> selectionTracker) {
         mSelectionTracker = selectionTracker;
     }
 }

@@ -1,14 +1,16 @@
 package com.igzali.parolayoneticisi.passwords.selection;
 
+import com.igzali.parolayoneticisi.data.Password;
+
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 
-public class PasswordItemDetails extends ItemDetailsLookup.ItemDetails<Long> {
+public class PasswordItemDetails extends ItemDetailsLookup.ItemDetails<Password> {
 
     private int mPosition;
-    private Long mKey;
+    private Password mKey;
 
-    public PasswordItemDetails(int position, Long key) {
+    public PasswordItemDetails(int position, Password key) {
         mPosition = position;
         mKey = key;
     }
@@ -20,7 +22,7 @@ public class PasswordItemDetails extends ItemDetailsLookup.ItemDetails<Long> {
 
     @Nullable
     @Override
-    public Long getSelectionKey() {
+    public Password getSelectionKey() {
         return mKey;
     }
 }

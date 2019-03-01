@@ -3,6 +3,7 @@ package com.igzali.parolayoneticisi.passwords.selection;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.igzali.parolayoneticisi.data.Password;
 import com.igzali.parolayoneticisi.passwords.PasswordAdapter;
 
 import androidx.annotation.NonNull;
@@ -10,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PasswordItemLookup extends ItemDetailsLookup<Long> {
+public class PasswordItemLookup extends ItemDetailsLookup<Password> {
 
     private final RecyclerView mRecyclerView;
 
@@ -21,7 +22,7 @@ public class PasswordItemLookup extends ItemDetailsLookup<Long> {
 
     @Nullable
     @Override
-    public ItemDetails<Long> getItemDetails(@NonNull MotionEvent e) {
+    public ItemDetails<Password> getItemDetails(@NonNull MotionEvent e) {
         View view = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
         if (view != null) {
             RecyclerView.ViewHolder holder = mRecyclerView.getChildViewHolder(view);

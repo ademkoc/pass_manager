@@ -6,6 +6,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.igzali.parolayoneticisi.R;
+import com.igzali.parolayoneticisi.data.Password;
 
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -17,10 +18,10 @@ public class RecyclerViewActionModeCallBack implements ActionMode.Callback {
     }
 
     private static final String TAG = RecyclerViewActionModeCallBack.class.getSimpleName();
-    private SelectionTracker<Long> mSelectionTracker;
+    private SelectionTracker<Password> mSelectionTracker;
     private OnActionItemClickListener mActionItemClickListener;
 
-    public RecyclerViewActionModeCallBack(SelectionTracker<Long> selectionTracker) {
+    public RecyclerViewActionModeCallBack(SelectionTracker<Password> selectionTracker) {
         mSelectionTracker = selectionTracker;
     }
 
