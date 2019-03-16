@@ -13,10 +13,10 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".passwords.AddEditActivity"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".passwords.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".passwords.MainActivity" />
         </activity>
         <activity
             android:name=".passwords.MainActivity"
