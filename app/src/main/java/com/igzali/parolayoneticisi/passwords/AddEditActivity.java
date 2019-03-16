@@ -20,6 +20,7 @@ public class AddEditActivity extends AppCompatActivity {
     private TextInputLayout mPasswordTextInputLayout;
     private TextInputLayout mDescriptionTextInputLayout;
     private TextInputLayout mLabelTextInputLayout;
+    private Password mPassword;
     //private CoordinatorLayout mCoordinatorLayout;
 
     @Override
@@ -37,9 +38,18 @@ public class AddEditActivity extends AppCompatActivity {
 
         //mCoordinatorLayout = findViewById(R.id.coordinator_add_edit);
 
-        if (getIntent().hasExtra("id")) {
-            long l = getIntent().getLongExtra("id", -1);
+        if (getIntent().getIntExtra(IntentConsts.KEY_ACTIVITY_REQUEST_CODE, IntentConsts.REQUEST_DEFAULT_PASSWORD_ACTION) == IntentConsts.REQUEST_EDIT_PASSWORD) {
+            mPassword = getIntent().getParcelableExtra(IntentConsts.KEY_PASSWORD_EXTRA);
+            fillFieldWithData(mPassword);
         }
+    }
+
+    private void fillFieldWithData(Password password) {
+        mUsernameTextInputLayout.getEditText().setText(password.getUsername());
+        mEmailTextInputLayout.getEditText().setText(password.getEmail());
+        mLabelTextInputLayout.getEditText().setText(password.getLabel());
+        mDescriptionTextInputLayout.getEditText().setText(password.getDescription());
+        mPasswordTextInputLayout.getEditText().setText(password.getPassword());
     }
 
     @Override
@@ -68,10 +78,12 @@ public class AddEditActivity extends AppCompatActivity {
         String description = mDescriptionTextInputLayout.getEditText().getText().toString();
         String username = mUsernameTextInputLayout.getEditText().getText().toString();
 
-        Password newPassword = new Password(label,email,password,username,description);
-
+        Password pass = new Password(label,email,password,username,description);
+        if (getIntent().getIntExtra(IntentConsts.KEY_ACTIVITY_REQUEST_CODE, IntentConsts.REQUEST_DEFAULT_PASSWORD_ACTION) == IntentConsts.REQUEST_EDIT_PASSWORD) {
+            pass.setId(mPassword.getId());
+        }
         Intent data = new Intent();
-        data.putExtra(IntentConsts.PASSWORD_EXTRA_NAME, newPassword);
+        data.putExtra(IntentConsts.KEY_PASSWORD_EXTRA, pass);
 
         setResult(RESULT_OK, data);
 

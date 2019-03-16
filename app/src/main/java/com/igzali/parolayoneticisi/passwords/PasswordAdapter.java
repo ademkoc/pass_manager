@@ -94,4 +94,8 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
     public void setSelectionTracker(SelectionTracker<Password> selectionTracker) {
         mSelectionTracker = selectionTracker;
     }
+
+    public SelectionTracker<Password> getSelectionTracker() {
+        return mSelectionTracker;
+    }
 }
