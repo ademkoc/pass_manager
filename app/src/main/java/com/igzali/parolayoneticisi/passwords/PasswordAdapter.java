@@ -50,11 +50,15 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
     @Override
     public void onBindViewHolder(@NonNull PasswordViewHolder holder, int position) {
         Password currentNote = getItem(position);
-        holder.usernameTextView.setText(currentNote.getUsername());
-        holder.emailTextView.setText(currentNote.getEmail());
-        holder.passwordTextView.setText(currentNote.getPassword());
+        if (currentNote.getUsername().trim().isEmpty())
+            holder.usernameTextView.setText(currentNote.getUsername());
+        else
+            holder.emailTextView.setText(currentNote.getEmail());
         holder.labelTextView.setText(currentNote.getLabel());
-        holder.descriptionTextView.setText(currentNote.getDescription());
+        if (currentNote.getDescription().trim().isEmpty())
+            holder.descriptionTextView.setVisibility(View.GONE);
+        else
+            holder.descriptionTextView.setText(currentNote.getDescription());
 
         if (mSelectionTracker != null)
             holder.itemView.setActivated(mSelectionTracker.isSelected(currentNote));
@@ -64,7 +68,6 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
 
         private TextView labelTextView;
         private TextView emailTextView;
-        private TextView passwordTextView;
         private TextView descriptionTextView;
         private TextView usernameTextView;
 
@@ -72,7 +75,6 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             super(itemView);
             labelTextView = itemView.findViewById(R.id.text_label);
             emailTextView = itemView.findViewById(R.id.text_email);
-            passwordTextView = itemView.findViewById(R.id.text_password);
             descriptionTextView = itemView.findViewById(R.id.text_description);
             usernameTextView = itemView.findViewById(R.id.text_username);
         }
