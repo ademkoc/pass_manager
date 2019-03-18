@@ -37,4 +37,8 @@ public class PasswordViewModel extends AndroidViewModel {
     public LiveData<List<Password>> getAllPasswords() {
         return mListLiveData;
     }
+
+    public String getDecryptedPassword(String passwordStr) {
+        return mPasswordRepository.decryptedPassword(passwordStr);
+    }
 }

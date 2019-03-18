@@ -113,6 +113,10 @@ public class Password implements Parcelable {
         this.updatedDate = updatedDate;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public int describeContents() {
         return 0;

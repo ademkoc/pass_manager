@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private void menuItemEditPassword(SelectionTracker<Password> tracker) {
         Iterator<Password> iterator = tracker.getSelection().iterator();
         Password password = iterator.next();
+        password.setPassword(mPasswordViewModel.getDecryptedPassword(password.getPassword()));
         Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
         intent.putExtra(IntentConsts.KEY_PASSWORD_EXTRA, password);
         startActivityForResult(intent, IntentConsts.REQUEST_EDIT_PASSWORD);
