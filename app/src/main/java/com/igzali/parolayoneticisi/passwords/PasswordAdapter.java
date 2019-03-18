@@ -3,6 +3,7 @@ package com.igzali.parolayoneticisi.passwords;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.igzali.parolayoneticisi.R;
@@ -63,8 +64,10 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         else
             holder.descriptionTextView.setText(currentNote.getDescription());
 
-        if (mSelectionTracker != null)
+        if (mSelectionTracker != null) {
             holder.itemView.setActivated(mSelectionTracker.isSelected(currentNote));
+            holder.copyImage.setVisibility(mSelectionTracker.isSelected(currentNote) ? View.GONE : View.VISIBLE);
+        }
     }
 
     public class PasswordViewHolder extends RecyclerView.ViewHolder {
@@ -73,6 +76,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         private TextView emailTextView;
         private TextView descriptionTextView;
         private TextView usernameTextView;
+        private ImageView copyImage;
 
         PasswordViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +84,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             emailTextView = itemView.findViewById(R.id.text_email);
             descriptionTextView = itemView.findViewById(R.id.text_description);
             usernameTextView = itemView.findViewById(R.id.text_username);
+            copyImage = itemView.findViewById(R.id.img_copy);
         }
 
         public ItemDetailsLookup.ItemDetails<Password> getItemDetails() {
