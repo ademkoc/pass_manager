@@ -50,11 +50,14 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
     @Override
     public void onBindViewHolder(@NonNull PasswordViewHolder holder, int position) {
         Password currentNote = getItem(position);
-        if (currentNote.getUsername().trim().isEmpty())
-            holder.usernameTextView.setText(currentNote.getUsername());
-        else
-            holder.emailTextView.setText(currentNote.getEmail());
+        holder.emailTextView.setText(currentNote.getEmail());
         holder.labelTextView.setText(currentNote.getLabel());
+
+        if (currentNote.getUsername().trim().isEmpty())
+            holder.usernameTextView.setVisibility(View.GONE);
+        else
+            holder.usernameTextView.setText(currentNote.getUsername());
+
         if (currentNote.getDescription().trim().isEmpty())
             holder.descriptionTextView.setVisibility(View.GONE);
         else
