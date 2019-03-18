@@ -12,8 +12,11 @@ import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.ClipboardManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -31,13 +34,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Observer<List<Password>> {
 
+    private final static String TAG = MainActivity.class.getSimpleName();
+    private final static String PASSWORD_CLIP_LABEL = "pass_clip";
+    private final static String KEY_ACTION_MODE = "is_action_mode_open";
     private PasswordViewModel mPasswordViewModel;
     private PasswordAdapter mPasswordAdapter;
     private CoordinatorLayout mCoordinatorLayout;
     private ActionMode mActionMode;
     private RecyclerViewActionModeCallBack mActionModeCallBack;
-    private final static String TAG = MainActivity.class.getSimpleName();
-    private static final String KEY_ACTION_MODE = "is_action_mode_open";
+    private ClipboardManager mClipboardService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         initRecyclerView(findViewById(R.id.recycler_view));
         setupContextualActionBar();
+        mClipboardService = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
         if (savedInstanceState != null) {
             SelectionTracker<Password> tracker = mPasswordAdapter.getSelectionTracker();
@@ -72,6 +78,13 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         mPasswordAdapter = new PasswordAdapter();
         mPasswordAdapter.setHasStableIds(true);
+        mPasswordAdapter.setOnCopyButtonClickListener((Password password) -> {
+            String decryptedPass = mPasswordViewModel.getDecryptedPassword(password.getPassword());
+            ClipData clipData = ClipData.newPlainText(PASSWORD_CLIP_LABEL, decryptedPass);
+            mClipboardService.setPrimaryClip(clipData);
+            Snackbar.make(mCoordinatorLayout, String.format("%s şifreniz kopyalandı",
+                    password.getLabel()), Snackbar.LENGTH_SHORT).show();
+        });
         recyclerView.setAdapter(mPasswordAdapter);
 
         mPasswordAdapter.setSelectionTracker(initSelectionTracker(recyclerView));

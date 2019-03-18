@@ -19,6 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.PasswordViewHolder> {
 
+    public interface OnCopyButtonClickListener {
+        void onClick(Password password);
+    }
+
     static final DiffUtil.ItemCallback<Password> DIFF_CALLBACK = new DiffUtil.ItemCallback<Password>() {
         @Override
         public boolean areItemsTheSame(@NonNull Password oldItem, @NonNull Password newItem) {
@@ -35,6 +39,7 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
         }
     };
     private SelectionTracker<Password> mSelectionTracker;
+    private OnCopyButtonClickListener mOnCopyButtonClickListener;
     private static final String TAG = PasswordAdapter.class.getSimpleName();
 
     public PasswordAdapter() {
@@ -85,6 +90,10 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
             descriptionTextView = itemView.findViewById(R.id.text_description);
             usernameTextView = itemView.findViewById(R.id.text_username);
             copyImage = itemView.findViewById(R.id.img_copy);
+
+            copyImage.setOnClickListener(v -> {
+                mOnCopyButtonClickListener.onClick(getItem(getAdapterPosition()));
+            });
         }
 
         public ItemDetailsLookup.ItemDetails<Password> getItemDetails() {
@@ -107,5 +116,9 @@ public class PasswordAdapter extends ListAdapter<Password, PasswordAdapter.Passw
 
     public SelectionTracker<Password> getSelectionTracker() {
         return mSelectionTracker;
+    }
+
+    public void setOnCopyButtonClickListener(OnCopyButtonClickListener onCopyButtonClickListener) {
+        mOnCopyButtonClickListener = onCopyButtonClickListener;
     }
 }
