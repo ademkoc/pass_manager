@@ -49,7 +49,10 @@ public class AddEditActivity extends AppCompatActivity {
         mEmailTextInputLayout.getEditText().setText(password.getEmail());
         mLabelTextInputLayout.getEditText().setText(password.getLabel());
         mDescriptionTextInputLayout.getEditText().setText(password.getDescription());
-        mPasswordTextInputLayout.getEditText().setText(password.getPassword());
+        //mPasswordTextInputLayout.getEditText().setText(password.getPassword());
+
+        mPasswordTextInputLayout.setHint("New Password");
+        mPasswordTextInputLayout.requestFocus();
     }
 
     @Override

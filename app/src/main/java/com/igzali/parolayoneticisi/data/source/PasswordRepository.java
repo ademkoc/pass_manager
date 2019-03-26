@@ -18,7 +18,7 @@ public class PasswordRepository {
 
     private PasswordDao mPasswordDao;
     private LiveData<List<Password>> mPasswordListLiveData;
-    private static KeyPair mKeyPair;
+    private KeyPair mKeyPair;
     private CipherWrapper mCipherWrapper;
 
     public PasswordRepository(Application application) {

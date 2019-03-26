@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
             public void onSelectionChanged() {
                 super.onSelectionChanged();
                 if (tracker.hasSelection()) {
+                    new Thread(() -> copyPasswordToClipBoard(tracker.getSelection().iterator().next())).start();
                     startContextualActionBar(tracker);
                 } else if (mActionMode != null){
                     mActionMode.finish();
@@ -114,6 +115,14 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
                 }
             }
         });
+    }
+
+    private void copyPasswordToClipBoard(Password password) {
+        String decryptedPass = mPasswordViewModel.getDecryptedPassword(password.getPassword());
+        ClipData clipData = ClipData.newPlainText(PASSWORD_CLIP_LABEL, decryptedPass);
+        mClipboardService.setPrimaryClip(clipData);
+        Snackbar.make(mCoordinatorLayout, String.format("%s şifreniz kopyalandı", password.getLabel()),
+                Snackbar.LENGTH_SHORT).show();
     }
 
     private void menuItemDeletePassword(SelectionTracker<Password> tracker) {
@@ -127,17 +136,16 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
     private void menuItemEditPassword(SelectionTracker<Password> tracker) {
         Iterator<Password> iterator = tracker.getSelection().iterator();
         Password password = iterator.next();
-        password.setPassword(mPasswordViewModel.getDecryptedPassword(password.getPassword()));
         Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
         intent.putExtra(IntentConsts.KEY_PASSWORD_EXTRA, password);
         startActivityForResult(intent, IntentConsts.REQUEST_EDIT_PASSWORD);
     }
 
-    private void startContextualActionBar(SelectionTracker tracker) {
+    private void startContextualActionBar(SelectionTracker<Password> tracker) {
         if (mActionMode == null) {
             mActionMode = startSupportActionMode(mActionModeCallBack);
         }
-        mActionMode.setTitle(String.format("Selected item count: %d", tracker.getSelection().size()));
+        mActionMode.setTitle(String.format("%s seçildi", tracker.getSelection().iterator().next().getLabel()));
         mActionModeCallBack.onMultiItemSelected(mActionMode);
     }
 

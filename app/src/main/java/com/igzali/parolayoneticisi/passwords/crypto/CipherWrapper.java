@@ -43,7 +43,7 @@ public class CipherWrapper {
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
-    public String decrypt(String data, Key key) {
+    public synchronized String decrypt(String data, Key key) {
         byte[] decodedData = null;
         try {
             mCipher.init(Cipher.DECRYPT_MODE, key);
