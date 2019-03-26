@@ -78,13 +78,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
 
         mPasswordAdapter = new PasswordAdapter();
         mPasswordAdapter.setHasStableIds(true);
-        mPasswordAdapter.setOnCopyButtonClickListener((Password password) -> {
-            String decryptedPass = mPasswordViewModel.getDecryptedPassword(password.getPassword());
-            ClipData clipData = ClipData.newPlainText(PASSWORD_CLIP_LABEL, decryptedPass);
-            mClipboardService.setPrimaryClip(clipData);
-            Snackbar.make(mCoordinatorLayout, String.format("%s şifreniz kopyalandı",
-                    password.getLabel()), Snackbar.LENGTH_SHORT).show();
-        });
+
         recyclerView.setAdapter(mPasswordAdapter);
 
         mPasswordAdapter.setSelectionTracker(initSelectionTracker(recyclerView));
@@ -155,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Pas
                 new PasswordItemLookup(recyclerView),
                 StorageStrategy.createParcelableStorage(Password.class)
         ).withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
+                SelectionPredicates.createSelectSingleAnything()
         ).build();
 
         return tracker;
