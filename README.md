@@ -2,5 +2,5 @@
 A simple android app to store passwords
 
 # Features
-stores passwords in encrypted form
-simple ui and simple usage
+- stores passwords in encrypted form
+- simple ui and simple usage
